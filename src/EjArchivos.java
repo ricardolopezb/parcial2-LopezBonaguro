@@ -30,6 +30,20 @@ public class EjArchivos {
      *
      * */
 
+    public void readResults() throws IOException {
+        File file = new File("resultados.txt");
+        RandomAccessFile raf = new RandomAccessFile(file, "rw");
+        int regLength = 4+4;
+        int regCant = (int)(raf.length()/regLength);
+        raf.seek(0);
+        for (int i = 0; i < regCant; i++) {
+            System.out.println("Marca: " + raf.readInt() + " - Cant: " + raf.readInt());
+
+        }
+        raf.close();
+
+    }
+
 
     public void generateDataFile() throws IOException {
         File file = new File("datos.txt");
@@ -43,7 +57,7 @@ public class EjArchivos {
         raf.close();
 
     }
-    public static int randomNumberInRange(int start, int end){
+    private static int randomNumberInRange(int start, int end){
         Random r = new Random();
         int low = start;
         int high = end;
@@ -70,6 +84,9 @@ public class EjArchivos {
     public void showMeanSpeedPerBrand() throws IOException {
         Car[] cars = readCarsFile();
         DynamicList<Float>[] marcasConVelocidades = new DynamicList[10];
+        for (int i = 0; i < marcasConVelocidades.length; i++) {
+            marcasConVelocidades[i] = new DynamicList<>();
+        }
         for (int i = 0; i < cars.length; i++) {
             int carBrand = cars[i].getMarca();
             int carKms = cars[i].getKms();
@@ -80,13 +97,14 @@ public class EjArchivos {
             marcasConVelocidades[carBrand-1].insertNext(meanSpeed);
         }
         for (int i = 0; i < marcasConVelocidades.length; i++) {
-            System.out.println("Marca nro. "+(i+1) + " - Velocidad Promedio: " + calcularVelocidad(marcasConVelocidades[i]));
+            System.out.println("Marca nro. "+(i+1) + " - Velocidad Promedio: " + calcularVelocidad(marcasConVelocidades[i])+" km/min");
         }
 
 
     }
 
     private Float calcularVelocidad(DynamicList<Float> marcasConVelocidade) {
+        if(marcasConVelocidade.isVoid()) return 0f;
         float promedio = 0;
         for (int i = 0; i < marcasConVelocidade.size(); i++) {
             marcasConVelocidade.goTo(i);
@@ -109,6 +127,7 @@ public class EjArchivos {
         raf.close();
         return cars;
     }
+
 
 
 }

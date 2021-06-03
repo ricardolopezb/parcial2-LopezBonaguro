@@ -22,6 +22,7 @@ public class Tester {
             ejArch.generateDataFile();
             ejArch.showMeanSpeedPerBrand();
             ejArch.generateCounterFile();
+            ejArch.readResults();
 
 
         } catch(Exception e){e.getMessage();}
